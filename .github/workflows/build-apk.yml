@@ -38,8 +38,7 @@ jobs:
       - name: Extract Android project
         run: |
           mkdir -p build-project
-          unzip -q Detention_Memo_Android_Project_v2.zip -d build-project
-
+          unzip -o Detention_Memo_DATE_TIME_CALC.zip
       - name: Install Gradle
         run: |
           wget -q https://services.gradle.org/distributions/gradle-8.9-bin.zip
