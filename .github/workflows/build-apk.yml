@@ -1,55 +1,53 @@
 name: Detention Memo APK Build
 
-on: 
-  workflow_dispatch:
-  push:
-    paths:
-      - 'Detention_Memo_DATE_TIME_CALC.zip'
-      - '.github/workflows/build-apk.yml'
-
-permissions:
-contents: read
+on: [push, workflow_dispatch]
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Check ZIP File
-    run: |
-      if [ ! -f "Detention_Memo_DATE_TIME_CALC.zip" ]; then
-        echo "ERROR: ZIP file not found in repository root."
-        exit 1
-      fi
+      - name: Verify ZIP
+        run: |
+          if [ ! -f "Detention_Memo_DATE_TIME_CALC.zip" ]; then
+            echo "ZIP file not found in repository root"
+            exit 1
+          fi
 
-  - name: Extract Android Project
-    run: unzip -o Detention_Memo_DATE_TIME_CALC.zip
+      - name: Extract Android Project
+        run: unzip -o Detention_Memo_DATE_TIME_CALC.zip
 
-  - name: Set Up Java
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: '17'
+      - name: Set Up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
 
-  - name: Set Up Gradle
-    uses: gradle/actions/setup-gradle@v4
+      - name: Set Up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-  - name: Build Debug APK
-    run: |
-      if [ -f "./gradlew" ]; then
-        chmod +x ./gradlew
-        ./gradlew assembleDebug
-      else
-        gradle assembleDebug
-      fi
+      - name: Build APK
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          elif [ -f "./app/gradlew" ]; then
+            cd app
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          else
+            echo "Gradle wrapper not found"
+            find . -maxdepth 4 -name gradlew
+            exit 1
+          fi
 
-  - name: Upload APK
-    uses: actions/upload-artifact@v4
-    with:
-      name: Detention-Memo-APK
-      path: '**/build/outputs/apk/debug/*.apk'
-      if-no-files-found: error
-      retention-days: 7
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Detention-Memo-APK
+          path: '**/build/outputs/apk/debug/*.apk'
+          if-no-files-found: error
+          retention-days: 7
