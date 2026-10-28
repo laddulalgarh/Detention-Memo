@@ -1,11 +1,11 @@
 name: Detention Memo APK Build
 
-on:
-workflow_dispatch:
-push:
-paths:
-- 'Detention_Memo_DATE_TIME_CALC.zip'
-- '.github/workflows/build-apk.yml'
+on: 
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Detention_Memo_DATE_TIME_CALC.zip'
+      - '.github/workflows/build-apk.yml'
 
 permissions:
 contents: read
