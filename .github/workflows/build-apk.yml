@@ -21,13 +21,12 @@ steps:
   - name: Check ZIP File
     run: |
       if [ ! -f "Detention_Memo_DATE_TIME_CALC.zip" ]; then
-        echo "ERROR: Detention_Memo_DATE_TIME_CALC.zip not found in repository root."
+        echo "ERROR: ZIP file not found in repository root."
         exit 1
       fi
 
   - name: Extract Android Project
-    run: |
-      unzip -o Detention_Memo_DATE_TIME_CALC.zip
+    run: unzip -o Detention_Memo_DATE_TIME_CALC.zip
 
   - name: Set Up Java
     uses: actions/setup-java@v4
